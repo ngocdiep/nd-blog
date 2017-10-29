@@ -13,8 +13,11 @@
       <a href='/home?top' title='Top'>
         <span>Top</span>
       </a>
-      <a href='/login' title='Login'>
+      <a *ngIf="!isAuthenticated" href='/login' title='Login'>
         <span>Login</span>
+      </a>{{isAuthenticated}}
+      <a *ngIf="isAuthenticated" href='/logout' title='Logout'>
+        <span>Logout</span>
       </a>
     </div>
   </div>

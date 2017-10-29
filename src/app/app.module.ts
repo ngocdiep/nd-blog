@@ -13,6 +13,10 @@ import { CookieService } from 'ngx-cookie-service';
 import { GraphQLModule } from './graphql.module';
 import { PostListComponent } from './post-list/post-list.component';
 import { PostService } from './shared/services/post.service';
+import { LogoutComponent } from './logout/logout.component';
+import { ShowAuthedDirective } from './shared/show-authed.directive';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { DefaultInterceptor } from './shared/interceptors/default.interceptor';
 
 @NgModule({
   declarations: [
@@ -21,7 +25,9 @@ import { PostService } from './shared/services/post.service';
     FooterComponent,
     HomeComponent,
     LoginComponent,
-    PostListComponent
+    PostListComponent,
+    LogoutComponent,
+    ShowAuthedDirective
   ],
   imports: [
     BrowserModule,
@@ -29,7 +35,16 @@ import { PostService } from './shared/services/post.service';
     AppRoutingModule,
     GraphQLModule
   ],
-  providers: [AuthService, CookieService, PostService],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: DefaultInterceptor,
+      multi: true,
+    },
+    AuthService,
+    CookieService,
+    PostService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

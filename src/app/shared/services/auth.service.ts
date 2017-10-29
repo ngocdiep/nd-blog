@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { Observable } from 'rxjs/Observable';
@@ -8,7 +8,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import { CookieService } from 'ngx-cookie-service';
 import { User } from '../models/user';
 import { GraphQLError } from 'graphql';
-const AUTH_TOKEN_KEY = 'SCAPHOLD_AUTH_TOKEN';
+const authorization = 'Authorization';
 
 const login = gql`
 mutation ($email: String!, $password: String!) {
@@ -16,12 +16,25 @@ mutation ($email: String!, $password: String!) {
     token,
     user {
       id,
+      email,
       firstName,
       lastName
     }
   }
 }
 `;
+
+const currentUser = gql`
+query {
+  user {
+    id,
+    email,
+    firstName,
+    lastName
+  }
+}
+`;
+
 export interface Error {
   error: any;
   errors: [any];
@@ -31,6 +44,8 @@ export interface ICredential {
   token: string;
 }
 export interface IGraphCoolUser {
+  id: string;
+  email: string;
   firstName: string;
   lastName: string;
 }
@@ -39,8 +54,13 @@ export interface IGraphCoolSigninUser {
   user: IGraphCoolUser;
 }
 
+export interface QueryUser {
+  user: User;
+}
+
 @Injectable()
 export class AuthService {
+
   private currentUserSubject = new BehaviorSubject<User>(new User());
   public currentUser = this.currentUserSubject.asObservable().distinctUntilChanged();
   private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
@@ -48,7 +68,30 @@ export class AuthService {
 
   constructor(
     private cookieService: CookieService,
-    private apollo: Apollo) { }
+    private apollo: Apollo) {
+  }
+
+  init(): void {
+    console.log('init: ' + this.cookieService.get(authorization));
+    if (this.cookieService.get(authorization)) {
+      this.apollo.query<QueryUser>({
+        query: currentUser
+      }).map(v => v.data).toPromise().then(rs => {
+        console.log('rs: ', rs);
+        if (rs.user.email) {
+          console.log('logged');
+          this.isAuthenticatedSubject.next(true);
+          this.currentUserSubject.next(rs.user);
+        } else {
+          this.isAuthenticatedSubject.next(false);
+          this.currentUserSubject.next(new User());
+        }
+      }).catch(ex => console.log(ex));
+    } else {
+      this.isAuthenticatedSubject.next(false);
+      this.currentUserSubject.next(new User());
+    }
+  }
 
 
   getAuthorizationHeader() {
@@ -70,12 +113,30 @@ export class AuthService {
   }
 
   private setCredential(cred: ICredential) {
-    localStorage.setItem(AUTH_TOKEN_KEY, cred.token);
+    localStorage.setItem(authorization, cred.token);
     this.cookieService.set('Authorization', cred.token);
+  }
+
+  private clearCredential() {
+    localStorage.removeItem(authorization);
+    this.cookieService.delete('Authorization');
   }
 
   private setAuth(user: User) {
     this.currentUserSubject.next(user);
     this.isAuthenticatedSubject.next(true);
+  }
+
+  logout() {
+    this.currentUserSubject.next(new User);
+    this.isAuthenticatedSubject.next(false);
+    this.clearCredential();
+  }
+
+  ensureLoggedIn(): boolean {
+    if (localStorage.getItem(authorization)) {
+      // logged in so return true
+      return true;
+    }
   }
 }
