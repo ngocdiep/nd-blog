@@ -1,4 +1,5 @@
-import { Component, OnInit, HostListener, NgZone, ViewChild, Renderer, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { Component, OnInit, HostListener, NgZone, ViewChild, Renderer, Input, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ScrollInformation } from '../../../app.component';
 import { AuthService } from '../../services/auth.service';
@@ -9,21 +10,19 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+
   @ViewChild('header') header;
   @Input() direction: Observable<string>;
   @Input() scrollInformation: Observable<ScrollInformation>;
+  isAuthenticated = false;
 
-  isAuthenticated;
-
-  constructor(private renderer: Renderer, private authService: AuthService) {
+  constructor(private renderer: Renderer, private authService: AuthService, private router: Router) {
   }
 
   ngOnInit() {
-    this.authService.init();
     this.authService.isAuthenticated.subscribe(rs => this.isAuthenticated = rs);
 
     this.scrollInformation.subscribe(v => {
-      console.log(v.scrollTopHeight);
       if (v.isUp) {
         if (v.scrollTopHeight > 40) {
           this.renderer.setElementClass(this.header.nativeElement, 'top', true);

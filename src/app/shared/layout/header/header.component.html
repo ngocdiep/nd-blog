@@ -1,7 +1,7 @@
 <div class='content-wrapper' #header>
   <div id='toolbar'>
     <div class="left">
-      <a href='/' title='Home'>
+      <a routerLink='/' title='Home'>
         <span>Home</span>
       </a>
       <form action='/search' autocomplete='off' id='search-form' method='get'>
@@ -13,10 +13,10 @@
       <a href='/home?top' title='Top'>
         <span>Top</span>
       </a>
-      <a *ngIf="!isAuthenticated" href='/login' title='Login'>
+      <a *ngIf="!isAuthenticated" routerLink='/login' title='Login'>
         <span>Login</span>
-      </a>{{isAuthenticated}}
-      <a *ngIf="isAuthenticated" href='/logout' title='Logout'>
+      </a>
+      <a *ngIf="isAuthenticated" routerLink='/logout' title='Logout'>
         <span>Logout</span>
       </a>
     </div>

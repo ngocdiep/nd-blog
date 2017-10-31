@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { AuthService } from '../shared/services/auth.service';
 import { Router } from '@angular/router';
 
@@ -14,18 +14,12 @@ export class LoginForm {
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-
   model: LoginForm;
   message: string;
 
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.authService.isAuthenticated.subscribe(rs => {
-      if (rs) {
-        this.router.navigateByUrl('');
-      }
-    });
     this.model = new LoginForm();
   }
 

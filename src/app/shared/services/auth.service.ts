@@ -8,6 +8,8 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import { CookieService } from 'ngx-cookie-service';
 import { User } from '../models/user';
 import { GraphQLError } from 'graphql';
+import 'rxjs/add/observable/of';
+
 const authorization = 'Authorization';
 
 const login = gql`
@@ -65,21 +67,20 @@ export class AuthService {
   public currentUser = this.currentUserSubject.asObservable().distinctUntilChanged();
   private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
   public isAuthenticated = this.isAuthenticatedSubject.asObservable();
+  public isLoggedIn = false;
 
   constructor(
     private cookieService: CookieService,
     private apollo: Apollo) {
+    this.isAuthenticatedSubject.asObservable().subscribe(rs => this.isLoggedIn = rs);
   }
 
-  init(): void {
-    console.log('init: ' + this.cookieService.get(authorization));
+  init() {
     if (this.cookieService.get(authorization)) {
       this.apollo.query<QueryUser>({
         query: currentUser
       }).map(v => v.data).toPromise().then(rs => {
-        console.log('rs: ', rs);
         if (rs.user.email) {
-          console.log('logged');
           this.isAuthenticatedSubject.next(true);
           this.currentUserSubject.next(rs.user);
         } else {
@@ -91,6 +92,16 @@ export class AuthService {
       this.isAuthenticatedSubject.next(false);
       this.currentUserSubject.next(new User());
     }
+  }
+
+  getCurrentUser() {
+    if (this.cookieService.get(authorization)) {
+      return this.apollo.query<QueryUser>({
+        query: currentUser
+      }).map(v => v.data.user);
+    }
+
+    return Observable.of(new User());
   }
 
 
@@ -131,12 +142,5 @@ export class AuthService {
     this.currentUserSubject.next(new User);
     this.isAuthenticatedSubject.next(false);
     this.clearCredential();
-  }
-
-  ensureLoggedIn(): boolean {
-    if (localStorage.getItem(authorization)) {
-      // logged in so return true
-      return true;
-    }
   }
 }

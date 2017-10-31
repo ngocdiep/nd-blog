@@ -17,6 +17,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { ShowAuthedDirective } from './shared/show-authed.directive';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DefaultInterceptor } from './shared/interceptors/default.interceptor';
+import { UnAuthGuard } from './shared/guards/unauth.guard';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { DefaultInterceptor } from './shared/interceptors/default.interceptor';
     },
     AuthService,
     CookieService,
-    PostService
+    PostService,
+    UnAuthGuard
   ],
   bootstrap: [AppComponent]
 })
