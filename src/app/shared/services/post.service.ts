@@ -3,19 +3,19 @@ import { Apollo, QueryRef } from 'apollo-angular';
 import { Observable } from 'rxjs/Observable';
 import gql from 'graphql-tag';
 
-export type Post = {
+export interface Post {
   id;
   title;
   description;
   owner: Owner;
 }
 
-export type Owner = {
+export interface Owner {
   id;
   email;
 }
 
-export type QueryAllPosts = {
+export interface QueryAllPosts {
   allPosts: [Post];
 }
 
@@ -32,6 +32,19 @@ query {
   }
 }
 `;
+
+const create = gql`
+mutation($title: String!, $description: String!){
+  createPost(title: $title, description: $description) {
+    title
+    description,
+    owner {
+      email
+    }
+  }
+}
+`;
+
 @Injectable()
 export class PostService {
 
@@ -41,5 +54,12 @@ export class PostService {
     return this.apollo.watchQuery<QueryAllPosts>({
       query: getPostAll
     });
+  }
+
+  create(post) {
+    this.apollo.mutate({
+      mutation: create,
+      variables: post
+    }).toPromise().then(rs => console.log(rs));
   }
 }

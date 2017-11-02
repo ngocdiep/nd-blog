@@ -39,9 +39,9 @@
 }
 
 #search-form {
-    width: calc(100% - 60px);
+    width: calc(100% - 160px);
     input {
-        width: calc(100% - 60px);
+        width: calc(100% - 160px);
         height: 30px;
         padding: 0 8px;
         border-radius: 2px 0 0 2px;
@@ -60,7 +60,6 @@
     width: auto!important;
     height: 30px;
     padding: 0 8px;
-    float: right;
     border-radius: 0 2px 2px 0;
     background: #66a992;
     font-size: 13px;

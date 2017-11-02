@@ -18,6 +18,7 @@ import { ShowAuthedDirective } from './shared/show-authed.directive';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DefaultInterceptor } from './shared/interceptors/default.interceptor';
 import { UnAuthGuard } from './shared/guards/unauth.guard';
+import { PostCreateComponent } from './post-create/post-create.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { UnAuthGuard } from './shared/guards/unauth.guard';
     LoginComponent,
     PostListComponent,
     LogoutComponent,
-    ShowAuthedDirective
+    ShowAuthedDirective,
+    PostCreateComponent
   ],
   imports: [
     BrowserModule,

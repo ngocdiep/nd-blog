@@ -1,3 +1,4 @@
+import { PostCreateComponent } from './post-create/post-create.component';
 import { UnAuthGuard } from './shared/guards/unauth.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -12,6 +13,11 @@ const routes: Routes = [
     children: [],
   },
   {
+    path: 'home',
+    component: HomeComponent,
+    children: [],
+  },
+  {
     path: 'login',
     component: LoginComponent,
     children: [],
@@ -21,7 +27,17 @@ const routes: Routes = [
     path: 'logout',
     component: LogoutComponent,
     children: [],
-  }
+  },
+  {
+    path: 'top',
+    component: HomeComponent,
+    children: [],
+  },
+  {
+    path: 'post/create',
+    component: PostCreateComponent,
+    children: [],
+  },
 ];
 
 @NgModule({
