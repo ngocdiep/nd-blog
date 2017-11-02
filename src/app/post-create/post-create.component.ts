@@ -20,6 +20,13 @@ export class PostCreateComponent implements OnInit {
   ngOnInit() {
   }
 
+  autogrow() {
+    const textArea = document.getElementById('description');
+    textArea.style.overflow = 'hidden';
+    textArea.style.height = '0px';
+    textArea.style.height = textArea.scrollHeight + 'px';
+  }
+
   onSubmit() {
     this.postService.create(this.model);
     console.log(this.model);
