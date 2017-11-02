@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/exhaustMap';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/startWith';
+import { AuthService } from './shared/services/auth.service';
 
 export class ScrollInformation {
   isUp: boolean;
@@ -18,12 +19,12 @@ export class ScrollInformation {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   title = 'app';
   @Output() scrollInformation$ = new EventEmitter<ScrollInformation>();
   private lastScrollTopHeight = 0;
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   @HostListener('window:scroll', [])
   private streamScrollEvents() {
@@ -33,5 +34,9 @@ export class AppComponent {
     this.lastScrollTopHeight = window.pageYOffset;
 
     this.scrollInformation$.emit(scrollInformation);
+  }
+
+  ngAfterViewInit(): void {
+    this.authService.init();
   }
 }
