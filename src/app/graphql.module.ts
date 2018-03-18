@@ -8,7 +8,8 @@ import { InMemoryCache, NormalizedCache } from 'apollo-cache-inmemory';
 
 // GraphiQL: https://launchpad.graphql.com/1jzxrj179
 // const uri = 'https://1jzxrj179.lp.gql.zone/graphql';
-const uri = 'https://api.graph.cool/simple/v1/cj5ge0gopwze40127slnlghfv';
+// const uri = 'https://api.graph.cool/simple/v1/cj5ge0gopwze40127slnlghfv';
+const uri = '/graphql';
 const uriExtra = 'https://1jzxrj179.lp.gql.zone/graphql';
 
 
