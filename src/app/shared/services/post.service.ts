@@ -4,40 +4,64 @@ import { Observable } from 'rxjs/Observable';
 import gql from 'graphql-tag';
 
 export interface Post {
-  id;
-  title;
-  description;
-  owner: Owner;
+  node: {
+    id;
+    headline;
+    body;
+    userByAuthorId: Owner;
+  };
 }
 
 export interface Owner {
   id;
-  email;
+  firstName;
+  lastName;
 }
 
 export interface QueryAllPosts {
-  allPosts: [Post];
+  allPosts: {
+    edges: [Post]
+  };
 }
 
 const getPostAll = gql`
 query {
   allPosts {
-    id,
-    title,
-    description,
-    owner {
-      id,
-      email
+    edges {
+      node {
+        id
+        headline
+        body
+        authorId
+        userByAuthorId {
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+}
+`;
+
+const getPostById = gql `
+query($id: Int!) {
+  postById(id: $id) {
+    id
+    headline
+    body
+    userByAuthorId {
+      firstName
+      lastName
     }
   }
 }
 `;
 
 const create = gql`
-mutation($title: String!, $description: String!){
-  createPost(title: $title, description: $description) {
-    title
-    description,
+mutation($headline: String!, $body: String!){
+  createPost(headline: $headline, body: $body) {
+    headline
+    body,
     owner {
       email
     }
@@ -53,6 +77,13 @@ export class PostService {
   getPostAll(): QueryRef<QueryAllPosts> {
     return this.apollo.watchQuery<QueryAllPosts>({
       query: getPostAll
+    });
+  }
+
+  getPostById(id: string): QueryRef<any> {
+    return this.apollo.watchQuery<any>({
+      query: getPostById,
+      variables: {'id': id}
     });
   }
 

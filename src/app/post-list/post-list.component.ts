@@ -10,15 +10,15 @@ import { Observable } from 'rxjs/Observable';
 })
 export class PostListComponent implements OnInit {
 
-  postQueryRef: QueryRef<QueryAllPosts>;
+  postsQueryRef: QueryRef<QueryAllPosts>;
   posts: Observable<[Post]>;
 
   constructor(private postService: PostService) { }
 
   ngOnInit() {
-    this.postQueryRef = this.postService.getPostAll();
+    this.postsQueryRef = this.postService.getPostAll();
 
-    this.posts = this.postQueryRef.valueChanges.map(result => result.data.allPosts);
+    this.posts = this.postsQueryRef.valueChanges.map(result => result.data.allPosts.edges);
   }
 
 }

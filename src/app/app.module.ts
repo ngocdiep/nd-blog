@@ -19,6 +19,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DefaultInterceptor } from './shared/interceptors/default.interceptor';
 import { UnAuthGuard } from './shared/guards/unauth.guard';
 import { PostCreateComponent } from './post-create/post-create.component';
+import { PostDetailComponent } from './post-detail/post-detail.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { PostCreateComponent } from './post-create/post-create.component';
     PostListComponent,
     LogoutComponent,
     ShowAuthedDirective,
-    PostCreateComponent
+    PostCreateComponent,
+    PostDetailComponent
   ],
   imports: [
     BrowserModule,
