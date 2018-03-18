@@ -23,11 +23,13 @@ export class DefaultInterceptor implements HttpInterceptor {
     ) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
-        console.log('intercept...' + this.cookieService.get('Authorization'));
-        const request = req.clone({ withCredentials: true });
-        const authReq = req.clone({
-            headers: req.headers.set('Authorization', 'Bearer ' + this.cookieService.get('Authorization'))
-        });
+        const token = this.cookieService.get('Authorization');
+        console.log('intercept... ' + token);
+        const authReq = req.clone();
+        if (token) {
+            authReq.headers.set('Authorization', 'Bearer ' + token);
+        }
+
         return next.handle(authReq);
     }
 }
