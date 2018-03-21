@@ -1,4 +1,3 @@
-import { Router } from '@angular/router';
 import { Component, OnInit, HostListener, NgZone, ViewChild, Renderer, Input, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ScrollInformation } from '../../../app.component';
@@ -12,11 +11,10 @@ import { AuthService } from '../../services/auth.service';
 export class HeaderComponent implements OnInit {
 
   @ViewChild('header') header;
-  @Input() direction: Observable<string>;
   @Input() scrollInformation: Observable<ScrollInformation>;
   isAuthenticated = false;
 
-  constructor(private renderer: Renderer, private authService: AuthService, private router: Router) {
+  constructor(private renderer: Renderer, private authService: AuthService) {
   }
 
   ngOnInit() {
