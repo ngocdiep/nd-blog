@@ -49,4 +49,12 @@ describe('HeaderComponent', () => {
     expect(routerLinks[1].linkParams).toBe('/top');
     expect(routerLinks[2].linkParams).toBe('/login');
   });
+
+  it('should show search box', () => {
+    const searchInput = fixture.debugElement.query(By.css('input[name=q]'));
+    expect(searchInput.nativeElement.placeholder).toBe('Search here...');
+
+    const searchSubmit = fixture.debugElement.query(By.css('input[type=submit]'));
+    expect(searchSubmit.nativeElement.value).toBe('Search');
+  });
 });
