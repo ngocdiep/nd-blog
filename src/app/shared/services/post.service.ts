@@ -50,9 +50,9 @@ query($id: Int!) {
     id
     headline
     body
+    createdAt
     userByAuthorId {
-      firstName
-      lastName
+      fullName
     }
   }
 }

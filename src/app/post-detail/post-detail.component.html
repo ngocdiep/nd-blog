@@ -3,4 +3,7 @@
   <p>
     {{(post | async)?.body}}
   </p>
+  <div class="info">
+    <span title="Written by: {{(post | async)?.userByAuthorId.fullName}}">{{((post | async)?.createdAt) | date:'medium'}}</span>
+  </div>
 </div>
