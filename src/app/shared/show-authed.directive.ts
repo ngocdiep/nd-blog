@@ -12,14 +12,14 @@ import { AuthService } from './services/auth.service';
 export class ShowAuthedDirective implements OnInit {
     constructor(
         private templateRef: TemplateRef<any>,
-        private uuthService: AuthService,
+        private authService: AuthService,
         private viewContainer: ViewContainerRef
     ) { }
 
     condition: boolean;
 
     ngOnInit() {
-        this.uuthService.isAuthenticated.subscribe(
+        this.authService.isAuthenticated.subscribe(
             (isAuthenticated) => {
                 if (isAuthenticated && this.condition || !isAuthenticated && !this.condition) {
                     this.viewContainer.createEmbeddedView(this.templateRef);
