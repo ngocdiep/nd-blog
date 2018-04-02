@@ -51,6 +51,8 @@ describe('HeaderComponent', () => {
   });
 
   it('should show search box', () => {
+    expect(fixture.debugElement.queryAll(By.css('input')).length).toBe(2, 'Should have 2 inputs in search form');
+
     const searchInput = fixture.debugElement.query(By.css('input[name=q]'));
     expect(searchInput.nativeElement.placeholder).toBe('Search here...');
 
