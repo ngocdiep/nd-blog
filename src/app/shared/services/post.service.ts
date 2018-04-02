@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { Observable } from 'rxjs/Observable';
 import gql from 'graphql-tag';
+import { AuthService } from './auth.service';
 
 export interface Post {
   node: {
@@ -26,24 +27,24 @@ export interface QueryAllPosts {
 
 const getPostAll = gql`
 query {
-  allPosts {
+  allPosts(orderBy: CREATED_AT_DESC) {
     edges {
       node {
         id
         headline
-        body
+        summary
         authorId
         userByAuthorId {
-          firstName
-          lastName
+          fullName
         }
+        createdAt
       }
     }
   }
 }
 `;
 
-const getPostById = gql `
+const getPostById = gql`
 query($id: Int!) {
   postById(id: $id) {
     id
@@ -58,12 +59,14 @@ query($id: Int!) {
 `;
 
 const create = gql`
-mutation($headline: String!, $body: String!){
-  createPost(headline: $headline, body: $body) {
-    headline
-    body,
-    owner {
-      email
+mutation ($authorId: Int!, $headline: String!, $body: String!) {
+  createPost(input: {post: {authorId: $authorId, headline: $headline, body: $body}}) {
+    post {
+      id
+      headline
+      userByAuthorId {
+        firstName
+      }
     }
   }
 }
@@ -72,7 +75,7 @@ mutation($headline: String!, $body: String!){
 @Injectable()
 export class PostService {
 
-  constructor(private apollo: Apollo) { }
+  constructor(private apollo: Apollo, private authService: AuthService) { }
 
   getPostAll(): QueryRef<QueryAllPosts> {
     return this.apollo.watchQuery<QueryAllPosts>({
@@ -83,14 +86,19 @@ export class PostService {
   getPostById(id: string): QueryRef<any> {
     return this.apollo.watchQuery<any>({
       query: getPostById,
-      variables: {'id': id}
+      variables: { 'id': id }
     });
   }
 
   create(post) {
-    this.apollo.mutate({
+    this.authService.currentUser.subscribe(val => {
+      console.log('id user: ' + val.id);
+      post.authorId = val.id;
+    });
+
+    return this.apollo.mutate({
       mutation: create,
       variables: post
-    }).toPromise().then(rs => console.log(rs));
+    });
   }
 }

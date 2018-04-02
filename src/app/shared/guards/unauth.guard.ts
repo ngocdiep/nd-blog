@@ -17,7 +17,7 @@ export class UnAuthGuard implements CanActivate {
 
     return this.authService.getCurrentUser().toPromise().then(user => {
       /* check to ensure that the current user is valid */
-      if (user && user.email) {
+      if (user && user.firstName) {
         this.authService.init();
         return false;
       }

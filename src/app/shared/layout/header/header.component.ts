@@ -4,6 +4,12 @@ import { Observable } from 'rxjs/Observable';
 import { ScrollInformation } from '../../../app.component';
 import { AuthService } from '../../services/auth.service';
 
+
+export class SearchForm {
+  constructor(public searchString: string) { }
+}
+
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -16,6 +22,8 @@ export class HeaderComponent implements OnInit {
   @Input() scrollInformation: Observable<ScrollInformation>;
   isAuthenticated = false;
 
+  model: SearchForm = new SearchForm('');
+
   constructor(private renderer: Renderer, private authService: AuthService, private router: Router) {
   }
 
@@ -27,15 +35,17 @@ export class HeaderComponent implements OnInit {
         if (v.scrollTopHeight > 40) {
           this.renderer.setElementClass(this.header.nativeElement, 'top', true);
         } else if (this.header.nativeElement.classList.contains('top')) {
-          setTimeout(() => {
             this.renderer.setElementClass(this.header.nativeElement, 'top', false);
-          }, 1000 / 60);
-
         }
       } else if (v.scrollTopHeight > 60) {
         this.renderer.setElementClass(this.header.nativeElement, 'top', false);
       }
     });
+  }
+
+  onSubmit() {
+    console.log('searchString: ' + this.model.searchString);
+    this.router.navigateByUrl('/search/' + this.model.searchString);
   }
 
 }

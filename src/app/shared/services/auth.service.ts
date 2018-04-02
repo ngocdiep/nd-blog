@@ -9,28 +9,24 @@ import { CookieService } from 'ngx-cookie-service';
 import { User } from '../models/user';
 import { GraphQLError } from 'graphql';
 import 'rxjs/add/observable/of';
+import { map, tap } from 'rxjs/operators';
+import { concat } from 'rxjs/operator/concat';
 
 const authorization = 'Authorization';
 
 const login = gql`
-mutation ($email: String!, $password: String!) {
-  signinUser(email: {email: $email, password: $password}) {
-    token,
-    user {
-      id,
-      email,
-      firstName,
-      lastName
-    }
+mutation($email: String!, $password: String!) {
+  authenticate(input: {email: $email, password: $password}) {
+    clientMutationId
+    jwtToken
   }
 }
 `;
 
 const currentUser = gql`
 query {
-  user {
+  currentUser {
     id,
-    email,
     firstName,
     lastName
   }
@@ -42,7 +38,6 @@ export interface Error {
   errors: [any];
 }
 export interface ICredential {
-  id: string;
   token: string;
 }
 export interface IGraphCoolUser {
@@ -57,7 +52,7 @@ export interface IGraphCoolSigninUser {
 }
 
 export interface QueryUser {
-  user: User;
+  currentUser: User;
 }
 
 @Injectable()
@@ -76,29 +71,24 @@ export class AuthService {
   }
 
   init() {
-    if (this.cookieService.get(authorization)) {
-      this.apollo.query<QueryUser>({
-        query: currentUser
-      }).map(v => v.data).toPromise().then(rs => {
-        if (rs.user.email) {
+    this.getCurrentUser().subscribe(
+      result => {
+        if (result.id) {
           this.isAuthenticatedSubject.next(true);
-          this.currentUserSubject.next(rs.user);
+          this.currentUserSubject.next(result);
         } else {
           this.isAuthenticatedSubject.next(false);
           this.currentUserSubject.next(new User());
         }
-      }).catch(ex => console.log(ex));
-    } else {
-      this.isAuthenticatedSubject.next(false);
-      this.currentUserSubject.next(new User());
-    }
+      }
+    );
   }
 
   getCurrentUser() {
-    if (this.cookieService.get(authorization)) {
+    if (this.getAuthorizationHeader()) {
       return this.apollo.query<QueryUser>({
         query: currentUser
-      }).map(v => v.data.user);
+      }).map(result => result.data.currentUser);
     }
 
     return Observable.of(new User());
@@ -106,7 +96,6 @@ export class AuthService {
 
 
   getAuthorizationHeader() {
-    console.log('Authorization: ' + this.cookieService.get('Authorization'));
     return this.cookieService.get('Authorization');
   }
 
@@ -115,21 +104,14 @@ export class AuthService {
     return this.apollo.mutate({
       mutation: login,
       variables: credentials
-    }).toPromise().then(rs => {
-      const { data } = rs;
-      this.setCredential({ token: data['signinUser']['token'], id: data['signinUser']['user']['id'] });
-      this.setAuth(data['signinUser']['user']);
-      return rs;
     });
   }
 
-  private setCredential(cred: ICredential) {
-    localStorage.setItem(authorization, cred.token);
+  public setCredential(cred: ICredential) {
     this.cookieService.set('Authorization', cred.token);
   }
 
   private clearCredential() {
-    localStorage.removeItem(authorization);
     this.cookieService.delete('Authorization');
   }
 

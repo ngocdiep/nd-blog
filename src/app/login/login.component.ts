@@ -30,12 +30,16 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   login(model: LoginForm): any {
-    this.authService.login(model).then(
-      result =>
-        this.router.navigateByUrl('')
-    ).catch(error => {
-      this.message = error.message;
-    });
+    this.authService.login(model).subscribe(
+      result => {
+        this.authService.setCredential({ token: result['data']['authenticate']['jwtToken'] });
+      },
+      (error) => {
+        this.message = error.message;
+      },
+      () => {
+        this.router.navigateByUrl('');
+      });
   }
 
   ngOnDestroy(): void {

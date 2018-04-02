@@ -1,8 +1,9 @@
 import { PostService } from './../shared/services/post.service';
 import { Component, OnInit, Input } from '@angular/core';
+import { Message } from '../shared/models/message';
 
 export class CreatePostForm {
-  constructor(public title: string, public description: string) { }
+  constructor(public headline: string, public body: string) { }
 }
 
 @Component({
@@ -13,7 +14,7 @@ export class CreatePostForm {
 export class PostCreateComponent implements OnInit {
 
   model: CreatePostForm = new CreatePostForm('', '');
-  message: string;
+  message: Message = new Message();
 
   constructor(private postService: PostService) { }
 
@@ -28,7 +29,9 @@ export class PostCreateComponent implements OnInit {
   }
 
   onSubmit() {
-    this.postService.create(this.model);
-    console.log(this.model);
+    this.postService.create(this.model).subscribe(
+      result => {
+        this.message.value = 'Created Successfully';
+      });
   }
 }

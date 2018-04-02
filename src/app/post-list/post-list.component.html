@@ -1,26 +1,15 @@
-<div id="postlist" *ngFor="let post of posts | async">
-  <div class="panel">
-    <div class="panel-heading">
-      <div class="text-center">
-        <div class="row">
-          <div class="col-sm-9">
-            <h3 class="pull-left">{{post.node.headline}}</h3>
-          </div>
-          <div class="col-sm-3">
-            <h4 class="pull-right">
-              <small>
-                <em>2014-07-30
-                  <br>18:30:00</em>
-              </small>
-            </h4>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel-body">
-        {{post.node.headline}}...
-      <a routerLink="/post/{{post.node.id}}">Read more</a>
+<div>
+  <div class="post-list" *ngFor="let post of posts | async">
+    <h3 class="pull-left">
+      <a routerLink="/post/{{post.node.id}}">{{post.node.headline}}</a>
+    </h3>
+    <p class="panel-body">
+      <a routerLink="/post/{{post.node.id}}">
+        {{post.node.summary}}...
+      </a>
+    </p>
+    <div class="info">
+      <span title="Written by: {{post.node.userByAuthorId.fullName}}">{{post.node.createdAt | date:'medium'}}</span>
     </div>
   </div>
-  <div>
+</div>

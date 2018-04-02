@@ -20,6 +20,7 @@ import { DefaultInterceptor } from './shared/interceptors/default.interceptor';
 import { UnAuthGuard } from './shared/guards/unauth.guard';
 import { PostCreateComponent } from './post-create/post-create.component';
 import { PostDetailComponent } from './post-detail/post-detail.component';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { PostDetailComponent } from './post-detail/post-detail.component';
     LogoutComponent,
     ShowAuthedDirective,
     PostCreateComponent,
-    PostDetailComponent
+    PostDetailComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
