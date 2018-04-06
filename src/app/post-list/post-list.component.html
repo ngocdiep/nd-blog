@@ -1,0 +1,15 @@
+<div>
+  <div class="post-list" *ngFor="let post of posts | async">
+    <h3>
+      <a routerLink="/post/{{post.node.id}}">{{post.node.headline}}</a>
+    </h3>
+    <p>
+      <a routerLink="/post/{{post.node.id}}">
+        {{post.node.summary}}...
+      </a>
+    </p>
+    <div class="info">
+      <span title="Written by: {{post.node.userByAuthorId.fullName}}">{{post.node.createdAt | date:'medium'}}</span>
+    </div>
+  </div>
+</div>

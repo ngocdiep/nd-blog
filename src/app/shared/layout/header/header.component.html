@@ -1,0 +1,27 @@
+<div class='content-wrapper' #header>
+  <div id='toolbar'>
+    <div class="left">
+      <a routerLink='/' title='Home'>
+        <span>Home</span>
+      </a>
+      <a routerLink='/top' title='Top'>
+        <span>Top</span>
+      </a>
+      <form id="search-form" (ngSubmit)="onSubmit()" #searchForm="ngForm">
+        <input type='text' name="search-string" placeholder='Search here...' size='15' [(ngModel)]="model.searchString" />
+        <input type='submit' id="submit-button" value='Search' />
+      </form>
+    </div>
+    <div class="right">
+      <a *ngIf="isAuthenticated" routerLink='/post/create' title='+ New Post'>
+        <span>+ New Post</span>
+      </a>
+      <a *ngIf="!isAuthenticated" routerLink='/login' title='Login'>
+        <span>Login</span>
+      </a>
+      <a *ngIf="isAuthenticated" routerLink='/logout' title='Logout'>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+</div>

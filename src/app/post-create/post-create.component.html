@@ -1,0 +1,23 @@
+<div class="container">
+  <h1>Create New Post</h1>
+
+  <div *ngIf="message" class="alert alert-danger">{{message.value}}</div>
+  <form (ngSubmit)="onSubmit()" #createPostForm="ngForm">
+    <div class="form-group">
+      <input type="text" placeholder="Title" class="form-control" id="title" name="title" required [(ngModel)]="model.headline" #title="ngModel">
+      <div [hidden]="title.valid || title.pristine" class="alert alert-danger">
+        Headline is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <textarea (keyup)="autogrow()" placeholder="Description" class="form-control" id="description" name="description" required [(ngModel)]="model.body"
+        #description="ngModel"></textarea>
+      <div [hidden]="description.valid || description.pristine" class="alert alert-danger">
+        Body is required
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-success" [disabled]="!createPostForm.form.valid">Create</button>
+  </form>
+</div>
