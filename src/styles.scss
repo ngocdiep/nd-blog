@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+html {
+    min-width: 360px;
+    background-color: rgb(233, 235, 238);
+    height:100%;
+}
+
+body {
+    min-height: 100%;
+}

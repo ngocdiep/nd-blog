@@ -23,6 +23,7 @@ import { SearchComponent } from './search/search.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { GraphQLModule } from './graphql/graphql.module';
 
+
 @NgModule({
   declarations: [
     AppComponent,
