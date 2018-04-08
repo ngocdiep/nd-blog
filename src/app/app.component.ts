@@ -1,16 +1,9 @@
-import { Directive, AfterViewInit, ElementRef, Input, Component, EventEmitter, Output } from '@angular/core';
-
-import { Observable, Subscription } from 'rxjs/Rx';
-import 'rxjs/add/operator/pairwise';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/exhaustMap';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/startWith';
-import { AuthService } from './shared/services/auth.service';
-import { debounce } from 'rxjs/operators';
+import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import 'rxjs/add/operator/debounceTime';
 import { fromEvent } from 'rxjs/observable/fromEvent';
-import { interval } from 'rxjs/observable/interval';
-import * as Rx from 'rxjs';
+import { AuthService } from './core/services';
+import { Router } from '@angular/router';
+
 
 export class ScrollInformation {
   isUp: boolean;
@@ -22,17 +15,38 @@ export class ScrollInformation {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit {
+
   title = 'nd blog';
   @Output() scrollInformation$ = new EventEmitter<ScrollInformation>();
   private lastScrollTopHeight = 0;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
+
+  ngOnInit(): void {
+    this.authService.getCurrentUser().subscribe(
+      result => {
+        if (result && result.data && result.data.currentUser) {
+          this.authService.setAuthentication(result.data.currentUser);
+        } else {
+          console.log('loi thuong: ' + result.errors);
+          this.authService.deleteAuthentication();
+          this.router.navigateByUrl('/login');
+        }
+      },
+      error => {
+        this.authService.deleteAuthentication();
+        this.authService.errors.next(error);
+        console.log('error: ', error);
+        this.router.navigateByUrl('/login');
+      }
+    );
+  }
+
 
   ngAfterViewInit(): void {
-    this.authService.init();
-    const scrolls = Rx.Observable.fromEvent(document, 'scroll');
-    const result = scrolls.debounce(() => interval(100));
+    const scrolls = fromEvent(document, 'scroll');
+    const result = scrolls.debounceTime(100);
 
     result.subscribe(x => {
       const scrollInformation = new ScrollInformation();

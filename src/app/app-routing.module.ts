@@ -1,13 +1,12 @@
-import { AuthGuard } from './shared/guards/auth.guard';
-import { PostCreateComponent } from './post-create/post-create.component';
-import { UnAuthGuard } from './shared/guards/unauth.guard';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
+import { PostCreateComponent } from './post-create/post-create.component';
 import { PostDetailComponent } from './post-detail/post-detail.component';
 import { SearchComponent } from './search/search.component';
+import { UnAuthGuard, AuthGuard } from './core/guards';
 
 const routes: Routes = [
   {

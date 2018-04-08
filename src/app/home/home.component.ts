@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
-import { AuthService } from './../shared/services/auth.service';
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../core/services';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +12,5 @@ export class HomeComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    console.log('uri: ' + this.router.url);
-    this.authService.init();
   }
 }

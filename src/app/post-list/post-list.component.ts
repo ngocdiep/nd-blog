@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { PostService, QueryAllPosts, Post } from '../shared/services/post.service';
 import { QueryRef } from 'apollo-angular';
 import { Observable } from 'rxjs/Observable';
+import { PostService } from '../core/services/post.service';
+import { GetPostAllQueryResult, PostNode } from '../core/graphql/query';
 
 @Component({
   selector: 'app-post-list',
@@ -10,8 +11,8 @@ import { Observable } from 'rxjs/Observable';
 })
 export class PostListComponent implements OnInit {
 
-  postsQueryRef: QueryRef<QueryAllPosts>;
-  posts: Observable<[Post]>;
+  postsQueryRef: QueryRef<GetPostAllQueryResult>;
+  posts: Observable<[PostNode]>;
 
   constructor(private postService: PostService) { }
 

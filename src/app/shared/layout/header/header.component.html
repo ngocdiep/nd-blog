@@ -7,6 +7,12 @@
       <a routerLink='/top' title='Top'>
         <span>Top</span>
       </a>
+      <a routerLink='/login' title='Top'>
+        <span>Login</span>
+      </a>
+      <a routerLink='/post/create' title='Top'>
+        <span>create post</span>
+      </a>
       <form id="search-form" (ngSubmit)="onSubmit()" #searchForm="ngForm">
         <input type='text' name="search-string" placeholder='Search here...' size='15' [(ngModel)]="model.searchString" />
         <input type='submit' id="submit-button" value='Search' />

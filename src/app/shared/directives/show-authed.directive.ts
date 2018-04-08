@@ -1,12 +1,6 @@
-import {
-    Directive,
-    Input,
-    OnInit,
-    TemplateRef,
-    ViewContainerRef
-} from '@angular/core';
+import { Directive, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import { AuthService } from '../../core/services/auth.service';
 
-import { AuthService } from './services/auth.service';
 
 @Directive({ selector: '[appShowAuthed]' })
 export class ShowAuthedDirective implements OnInit {
@@ -33,5 +27,4 @@ export class ShowAuthedDirective implements OnInit {
     @Input() set showAuthed(condition: boolean) {
         this.condition = condition;
     }
-
 }

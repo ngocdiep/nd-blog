@@ -1,6 +1,6 @@
-import { PostService } from './../shared/services/post.service';
-import { Component, OnInit, Input } from '@angular/core';
-import { Message } from '../shared/models/message';
+import { Component, OnInit } from '@angular/core';
+import { Message } from '../core/models/message';
+import { PostService } from '../core/services/post.service';
 
 export class CreatePostForm {
   constructor(public headline: string, public body: string) { }

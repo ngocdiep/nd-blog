@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PostService, Post } from '../shared/services/post.service';
 import { QueryRef } from 'apollo-angular';
 import { Observable } from 'rxjs/Observable';
+import { PostService } from '../core/services/post.service';
 
 @Component({
   selector: 'app-post-detail',

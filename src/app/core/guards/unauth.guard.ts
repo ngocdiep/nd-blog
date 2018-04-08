@@ -1,7 +1,7 @@
-import { AuthService } from './../services/auth.service';
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { AuthService } from './../services/auth.service';
 
 /* This guard uses to prevent enter a link that only available for the user has not login yet.
 For example: if user aready logged in, use this guard to prevent user access to /login, /register,
@@ -14,15 +14,15 @@ export class UnAuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-      console.log('this.authService.isLoggedIn: ' + this.authService.isLoggedIn);
 
-    if (this.authService.isLoggedIn) {
-      console.log('already logged in');
-      this.router.navigateByUrl('/');
-      return false;
-    }
+    return this.authService.getCurrentUser().map(result => {
+      if (result && result.data && result.data.currentUser) {
+        console.log('already logged in');
+        this.router.navigateByUrl('/');
+        return false;
+      }
 
-    return true;
-
+      return true;
+    });
   }
 }

@@ -1,8 +1,8 @@
-import { Component, OnInit, HostListener, NgZone, ViewChild, Renderer, Input, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { ScrollInformation } from '../../../app.component';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { AuthService } from '../../../core/services';
 
 
 export class SearchForm {
@@ -20,7 +20,6 @@ export class HeaderComponent implements OnInit {
   @ViewChild('header') header;
   @Input() scrollInformation: Observable<ScrollInformation>;
   isAuthenticated = false;
-
   model: SearchForm = new SearchForm('');
 
   constructor(private renderer: Renderer, private authService: AuthService, private router: Router) {

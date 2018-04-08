@@ -1,19 +1,7 @@
-import {
-    HttpInterceptor,
-    HttpRequest,
-    HttpHandler,
-    HttpSentEvent,
-    HttpHeaderResponse,
-    HttpProgressEvent,
-    HttpResponse,
-    HttpUserEvent
-} from '@angular/common/http';
-import { Injectable, Inject, PLATFORM_ID, Injector } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { isPlatformBrowser } from '@angular/common';
-import * as express from 'express';
-import { AuthService } from '../services/auth.service';
+import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie';
+import { Observable } from 'rxjs/Observable';
 
 
 @Injectable()

@@ -47,7 +47,8 @@
     "apollo-cache-inmemory": "1.1.12",
     "apollo-client": "2.2.8",
     "apollo-link": "1.2.1",
-    "graphql-tag": "2.8.0"
+    "graphql-tag": "2.8.0",
+    "@types/graphql": "0.13.0"
   },
   "devDependencies": {
     "@angular/cli": "^1.7.3",
