@@ -10,16 +10,6 @@ import { UnAuthGuard, AuthGuard } from './core/guards';
 
 const routes: Routes = [
   {
-    path: '',
-    component: HomeComponent,
-    children: [],
-  },
-  {
-    path: 'home',
-    component: HomeComponent,
-    children: [],
-  },
-  {
     path: 'search/:searchString',
     component: SearchComponent,
     children: []

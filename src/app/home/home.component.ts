@@ -1,5 +1,5 @@
-import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../core/services';
 
 @Component({
@@ -9,7 +9,10 @@ import { AuthService } from '../core/services';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private authService: AuthService, private router: Router) { }
+  isAuthenticated: boolean;
+
+  constructor(private route: ActivatedRoute, private authService: AuthService) {
+  }
 
   ngOnInit() {
   }
