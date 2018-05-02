@@ -26,18 +26,24 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.authService.getCurrentUser().subscribe(
       result => {
-        if (result && result.data && result.data.currentUser) {
-          this.authService.setAuthentication(result.data.currentUser);
-        } else {
-          console.log('loi thuong: ' + result.errors);
+        if (result.errors) {
+          console.log('error: ', result.errors);
           this.authService.deleteAuthentication();
-          this.router.navigateByUrl('/login');
+          console.log('status: ', result.networkStatus);
+          return;
+        }
+
+        if (result.data && result.data.currentUser) {
+          this.authService.setAuthentication(result.data.currentUser);
         }
       },
       error => {
         this.authService.deleteAuthentication();
-        this.authService.errors.next(error);
-        console.log('error: ', error);
+        console.log(error);
+        if (String(error).endsWith('403 Forbidden')) {
+          console.log('invalid token');
+
+        }
         this.router.navigateByUrl('/login');
       }
     );
